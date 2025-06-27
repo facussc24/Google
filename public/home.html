@@ -149,9 +149,11 @@
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); } }); }, { threshold: 0.1 });
         document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
     </script>
-    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-auth-compat.js"></script>
-    <script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js';
+    </script>
+    <script type="module">
         const firebaseConfig = {
           apiKey: "TU_API_KEY",
           authDomain: "TU_AUTH_DOMAIN",
@@ -160,10 +162,10 @@
           messagingSenderId: "TU_MESSAGING_SENDER_ID",
           appId: "TU_APP_ID"
         };
-        firebase.initializeApp(firebaseConfig);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
         document.addEventListener('DOMContentLoaded', () => {
-            const auth = firebase.auth();
 
             const loginButton = document.getElementById('login-btn-desktop');
             const loginButtonMobile = document.getElementById('login-btn-mobile');
@@ -175,7 +177,7 @@
                 overlays.forEach(overlay => overlay.classList.remove('hidden'));
             };
 
-            auth.onAuthStateChanged((user) => {
+            onAuthStateChanged(auth, (user) => {
                 if (user) {
                     console.log("Usuario detectado:", user.email, ". Aplicando estado 'Conectado'.");
 
@@ -184,7 +186,7 @@
                         button.className = 'font-semibold text-amber-400 bg-transparent hover:bg-amber-500/20 border border-amber-500 rounded-lg py-2 px-5 transition-all duration-300';
                         button.onclick = (e) => {
                             e.preventDefault();
-                            auth.signOut();
+                            signOut(auth);
                         };
                     };
                     setupLogoutButton(loginButton);
