@@ -70,6 +70,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="text-gray-800">
+    <div id="loader" class="p-4 text-center">Verificando acceso...</div>
+    <div id="page-content" class="hidden">
 
     <!-- Barra de navegación -->
     <nav class="bg-corporate shadow-lg">
@@ -574,6 +576,19 @@
 
         App.init();
     });
+    </script>
+    </div>
+    <script>
+const loader = document.getElementById('loader');
+const pageContent = document.getElementById('page-content');
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    loader.style.display = 'none';
+    pageContent.classList.remove('hidden');
+  } else {
+    window.location.href = 'login.html';
+  }
+});
     </script>
 </body>
 </html>
