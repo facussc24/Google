@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div id="loader" class="p-4 text-center">Verificando acceso...</div>
+    <div id="page-content" class="hidden w-full">
 
     <nav class="bg-corporate shadow-lg w-full absolute top-0 left-0">
         <div class="container mx-auto px-4 md:px-6">
@@ -52,13 +54,18 @@
           appId: "TU_APP_ID"
         };
         firebase.initializeApp(firebaseConfig);
+        const loader = document.getElementById('loader');
+        const pageContent = document.getElementById('page-content');
         const auth = firebase.auth();
         auth.onAuthStateChanged((user) => {
-            if (!user) {
-                console.log('Acceso no autorizado, redirigiendo a login...');
-                window.location.href = 'login.html';
-            }
+          if (user) {
+            loader.style.display = 'none';
+            pageContent.classList.remove('hidden');
+          } else {
+            window.location.href = 'login.html';
+          }
         });
     </script>
+</div>
 </body>
 </html>

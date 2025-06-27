@@ -43,6 +43,8 @@
     </style>
 </head>
 <body class="text-gray-800">
+    <div id="loader" class="p-4 text-center">Verificando acceso...</div>
+    <div id="page-content" class="hidden">
 
     <nav class="bg-corporate shadow-lg">
         <div class="container mx-auto px-4 md:px-6">
@@ -349,7 +351,9 @@
     </script>
 <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-auth-compat.js"></script>
-<script>
+</script>
+    </div>
+    <script>
 const firebaseConfig = {
   apiKey: "TU_API_KEY",
   authDomain: "TU_AUTH_DOMAIN",
@@ -359,11 +363,15 @@ const firebaseConfig = {
   appId: "TU_APP_ID"
 };
 firebase.initializeApp(firebaseConfig);
+const loader = document.getElementById('loader');
+const pageContent = document.getElementById('page-content');
 const auth = firebase.auth();
 auth.onAuthStateChanged((user) => {
-  if (!user) {
-    console.log("Acceso no autorizado, redirigiendo a login...");
-    window.location.href = "login.html";
+  if (user) {
+    loader.style.display = 'none';
+    pageContent.classList.remove('hidden');
+  } else {
+    window.location.href = 'login.html';
   }
 });
 </script>
