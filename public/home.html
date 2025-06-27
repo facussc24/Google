@@ -148,19 +148,6 @@
         animate();
         const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); } }); }, { threshold: 0.1 });
         document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
-        document.addEventListener('DOMContentLoaded', () => {
-            const moduleLinks = document.querySelectorAll('.module-link');
-            const overlays = document.querySelectorAll('.module-overlay');
-            function setOverlays(show) { overlays.forEach(overlay => { show ? overlay.classList.remove('hidden') : overlay.classList.add('hidden'); }); }
-            moduleLinks.forEach(link => {
-                link.addEventListener('click', (event) => {
-                    if (!isUserLoggedIn) {
-                        event.preventDefault();
-                        setOverlays(true);
-                    }
-                });
-            });
-        });
     </script>
     <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-auth-compat.js"></script>
@@ -174,20 +161,51 @@
           appId: "TU_APP_ID"
         };
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        let isUserLoggedIn = false;
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                console.log('Usuario autenticado:', user.uid);
-                isUserLoggedIn = true;
-                document.querySelectorAll(".module-overlay").forEach(o=>o.classList.add("hidden"));
-                document.getElementById('login-btn-desktop').style.display = 'none';
-            } else {
-                console.log('Ningún usuario autenticado.');
-                isUserLoggedIn = false;
-                document.getElementById('login-btn-desktop').style.display = 'block';
-                document.querySelectorAll(".module-overlay").forEach(o=>o.classList.remove("hidden"));
-            }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const auth = firebase.auth();
+            const loginButton = document.getElementById('login-btn-desktop');
+            const loginButtonMobile = document.getElementById('login-btn-mobile');
+            const moduleLinks = document.querySelectorAll('.module-link');
+            const overlays = document.querySelectorAll('.module-overlay');
+
+            const blockModules = (event) => {
+                event.preventDefault();
+                overlays.forEach(overlay => overlay.classList.remove('hidden'));
+            };
+
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    console.log("Usuario detectado:", user.email, ". Aplicando estado 'Conectado'.");
+                    const setupLogoutButton = (button) => {
+                        button.textContent = 'Cerrar Sesión';
+                        button.className = 'font-semibold text-amber-400 bg-transparent hover:bg-amber-500/20 border border-amber-500 rounded-lg py-2 px-5 transition-all duration-300';
+                        button.onclick = (e) => {
+                            e.preventDefault();
+                            auth.signOut();
+                        };
+                    };
+                    setupLogoutButton(loginButton);
+                    // setupLogoutButton(loginButtonMobile); // Si quieres aplicar el mismo estilo al móvil
+                    moduleLinks.forEach(link => {
+                        link.removeEventListener('click', blockModules);
+                    });
+                    overlays.forEach(overlay => overlay.classList.add('hidden'));
+                } else {
+                    console.log("No hay usuario. Aplicando estado 'Desconectado'.");
+                    const setupLoginButton = (button) => {
+                        button.textContent = 'Iniciar Sesión';
+                        button.className = 'font-semibold text-white bg-transparent hover:bg-blue-500/20 border border-blue-400 rounded-lg py-2 px-5 transition-all duration-300';
+                        button.href = 'login.html';
+                        button.onclick = null;
+                    };
+                    setupLoginButton(loginButton);
+                    // setupLoginButton(loginButtonMobile);
+                    moduleLinks.forEach(link => {
+                        link.addEventListener('click', blockModules);
+                    });
+                }
+            });
         });
     </script>
 </body>
