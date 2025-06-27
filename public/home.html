@@ -3,9 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Proyecto Barack - Ingeniería Automotriz</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Three.js para la animación de fondo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        /* Estilo base y para la animación */
+        html {
+            scroll-behavior: smooth; /* Habilita el desplazamiento suave */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a192f; /* Azul noche oscuro */
+            color: #e6f1ff;
+            overflow-x: hidden;
+        }
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+        /* Clase para animaciones al hacer scroll */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Estilo de "glassmorphism" para las tarjetas */
+        .glass-card {
+            background: rgba(23, 37, 61, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
 </head>
-<body>
-    <h1>Home</h1>
+<body class="w-full">
+
+    <!-- Canvas para la animación de Three.js -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Contenedor principal -->
+    <div class="relative z-10">
+
+        <!-- Barra de Navegación -->
+        <header class="py-5 px-4 sm:px-6 lg:px-8 bg-transparent fixed top-0 w-full z-50">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <svg class="h-8 w-8 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                    <span class="text-xl font-bold text-white">Proyecto Barack</span>
+                </div>
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="text-gray-300 hover:text-blue-400 transition-colors duration-300">Inicio</a>
+                    <a href="#" class="text-gray-300 hover:text-blue-400 transition-colors duration-300">Documentación</a>
+                    <a href="#" class="text-gray-300 hover:text-blue-400 transition-colors duration-300">Soporte</a>
+                </nav>
+                <button class="md:hidden p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-700">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Sección Hero -->
+        <section class="min-h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl">
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4">
+                    Ingeniería para la <span class="text-blue-400">Industria Automotriz</span>
+                </h1>
+                <p class="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    Plataforma integral para la gestión de datos maestros, análisis AMFE y sinópticos de producto. Optimizando el ciclo de vida de cada componente.
+                </p>
+                <a href="#modulos" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg transition-transform transform hover:scale-105 duration-300 shadow-lg shadow-blue-500/50">
+                    Explorar Módulos
+                </a>
+            </div>
+        </section>
+
+        <!-- Sección de Módulos / Botones -->
+        <section id="modulos" class="py-20 sm:py-32 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 fade-in-section">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white">Nuestros Módulos Principales</h2>
+                    <p class="mt-4 text-lg text-gray-400">Accede directamente a nuestras herramientas de ingeniería.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Tarjeta 1: Listado Maestro -->
+                    <div class="fade-in-section glass-card rounded-xl p-8 text-center transform hover:-translate-y-2 transition-transform duration-300">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-900/50 mx-auto mb-6">
+                            <svg class="h-8 w-8 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Listado Maestro</h3>
+                        <p class="text-gray-300 mb-6">Gestiona la ficha técnica de cada componente, asegurando la trazabilidad y consistencia de los datos.</p>
+                        <a href="#" class="font-semibold text-blue-400 hover:text-blue-300 transition-colors duration-300">Acceder ahora &rarr;</a>
+                    </div>
+
+                    <!-- Tarjeta 2: AMFE -->
+                    <div class="fade-in-section glass-card rounded-xl p-8 text-center transform hover:-translate-y-2 transition-transform duration-300" style="transition-delay: 150ms;">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-900/50 mx-auto mb-6">
+                           <svg class="h-8 w-8 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">AMFE</h3>
+                        <p class="text-gray-300 mb-6">Realiza análisis de modos de falla para identificar y mitigar riesgos potenciales en el diseño y producción.</p>
+                        <a href="#" class="font-semibold text-blue-400 hover:text-blue-300 transition-colors duration-300">Iniciar Análisis &rarr;</a>
+                    </div>
+
+                    <!-- Tarjeta 3: Sinóptico Producto -->
+                    <div class="fade-in-section glass-card rounded-xl p-8 text-center transform hover:-translate-y-2 transition-transform duration-300" style="transition-delay: 300ms;">
+                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-900/50 mx-auto mb-6">
+                            <svg class="h-8 w-8 text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 12l4.179 2.25M6.429 16.5L2.25 12l4.179-2.25m11.142 0l-5.571 3-5.571-3.001m11.142 0l4.179 2.25-4.179 2.25m0-4.5l-5.571 3-5.571-3.001" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Sinóptico Producto</h3>
+                        <p class="text-gray-300 mb-6">Explora la estructura de despiece de productos (BOM) con una visualización jerárquica e interactiva.</p>
+                        <a href="#" class="font-semibold text-blue-400 hover:text-blue-300 transition-colors duration-300">Ver Sinóptico &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900/40 text-center py-8 px-4 sm:px-6 lg:px-8 mt-20">
+            <p class="text-gray-400">&copy; 2024 Proyecto Barack. Todos los derechos reservados.</p>
+            <p class="text-gray-500 text-sm mt-2">Plataforma interna para el equipo de Ingeniería.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // --- Lógica para animación de fondo con Three.js ---
+
+        let scene, camera, renderer, particles, mouseX = 0, mouseY = 0;
+        let windowHalfX = window.innerWidth / 2;
+        let windowHalfY = window.innerHeight / 2;
+
+        function init() {
+            // Escena
+            scene = new THREE.Scene();
+
+            // Cámara
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+            camera.position.z = 1000;
+
+            // Renderer
+            const canvas = document.getElementById('bg-canvas');
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Partículas
+            const particleCount = 1000;
+            const particlesGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 2000;
+            }
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+            const particleMaterial = new THREE.PointsMaterial({
+                color: 0x4a90e2, // Color azul para las partículas
+                size: 2,
+                transparent: true,
+                blending: THREE.AdditiveBlending
+            });
+
+            particles = new THREE.Points(particlesGeometry, particleMaterial);
+            scene.add(particles);
+
+            // Eventos
+            document.addEventListener('mousemove', onDocumentMouseMove, false);
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            render();
+        }
+
+        function render() {
+            const time = Date.now() * 0.00005;
+
+            // Animar cámara
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+            
+            // Animar partículas
+            particles.rotation.x = time * 0.2;
+            particles.rotation.y = time * 0.2;
+
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            windowHalfX = window.innerWidth / 2;
+            windowHalfY = window.innerHeight / 2;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onDocumentMouseMove(event) {
+            mouseX = (event.clientX - windowHalfX) / 2;
+            mouseY = (event.clientY - windowHalfY) / 2;
+        }
+        
+        // Iniciar todo
+        init();
+        animate();
+
+
+        // --- Lógica para animaciones al hacer scroll ---
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, {
+            threshold: 0.1 // Se activa cuando el 10% del elemento es visible
+        });
+
+        const sections = document.querySelectorAll('.fade-in-section');
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
 </body>
 </html>
