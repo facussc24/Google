@@ -73,10 +73,9 @@
     </div>
 
     <!-- SDKs de Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-auth-compat.js"></script>
-
-    <script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js';
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js';
         // =================================================================================
         // CONFIGURACIÓN DE FIREBASE
         // ESTA ES LA CONFIGURACIÓN REAL DEL PROYECTO
@@ -92,9 +91,9 @@
         };
 
         // Inicialización
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const googleProvider = new firebase.auth.GoogleAuthProvider();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
 
         // =================================================================================
         // REFERENCIAS AL DOM
@@ -109,8 +108,7 @@
         // FUNCIÓN DE REDIRECCIÓN
         // =================================================================================
         const redirectToHome = () => {
-             // Cambia 'home.html' por tu página de destino principal
-            window.location.href = 'home.html';
+            window.location.href = 'index.html';
         };
         
         // =================================================================================
@@ -151,8 +149,8 @@
 
         // --- Inicio de sesión con Google ---
         googleBtn.addEventListener('click', () => {
-            messageContainer.textContent = ''; // Limpiar mensajes
-            auth.signInWithPopup(googleProvider)
+            messageContainer.textContent = '';
+            signInWithPopup(auth, googleProvider)
                 .then(handleAuthSuccess)
                 .catch(handleAuthError);
         });
@@ -165,7 +163,7 @@
             
             messageContainer.textContent = ''; // Limpiar mensajes
             
-            auth.signInWithEmailAndPassword(email, password)
+            signInWithEmailAndPassword(auth, email, password)
                 .then(handleAuthSuccess)
                 .catch(handleAuthError);
         });

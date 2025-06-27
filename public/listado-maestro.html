@@ -577,11 +577,12 @@
         App.init();
     });
     </script>
-<script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-auth-compat.js"></script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.10.0/firebase-auth.js';
 </script>
     </div>
-    <script>
+    <script type="module">
 const firebaseConfig = {
   apiKey: "TU_API_KEY",
   authDomain: "TU_AUTH_DOMAIN",
@@ -590,11 +591,11 @@ const firebaseConfig = {
   messagingSenderId: "TU_MESSAGING_SENDER_ID",
   appId: "TU_APP_ID"
 };
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const loader = document.getElementById('loader');
 const pageContent = document.getElementById('page-content');
-const auth = firebase.auth();
-auth.onAuthStateChanged((user) => {
+onAuthStateChanged(auth, (user) => {
   if (user) {
     loader.style.display = 'none';
     pageContent.classList.remove('hidden');
