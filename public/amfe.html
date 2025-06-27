@@ -320,5 +320,25 @@
         modalsContainer.querySelector('#confirmation-modal .modal-cancel-btn').addEventListener('click', hideConfirmationModal);
     });
     </script>
+<script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-auth-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_AUTH_DOMAIN",
+  projectId: "TU_PROJECT_ID",
+  storageBucket: "TU_STORAGE_BUCKET",
+  messagingSenderId: "TU_MESSAGING_SENDER_ID",
+  appId: "TU_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+auth.onAuthStateChanged((user) => {
+  if (!user) {
+    console.log("Acceso no autorizado, redirigiendo a login...");
+    window.location.href = "login.html";
+  }
+});
+</script>
 </body>
 </html>
