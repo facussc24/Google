@@ -164,59 +164,54 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const auth = firebase.auth();
-            let isUserLoggedIn = false;
 
-            const moduleLinks = document.querySelectorAll('.module-link');
-            const overlays = document.querySelectorAll('.module-overlay');
             const loginButton = document.getElementById('login-btn-desktop');
             const loginButtonMobile = document.getElementById('login-btn-mobile');
+            const moduleLinks = document.querySelectorAll('.module-link');
+            const overlays = document.querySelectorAll('.module-overlay');
 
-            const setupModuleClickListeners = () => {
-                moduleLinks.forEach(link => {
-                    link.addEventListener('click', (event) => {
-                        if (!isUserLoggedIn) {
-                            event.preventDefault();
-                            overlays.forEach(overlay => overlay.classList.remove('hidden'));
-                        }
-                    });
-                });
-            };
-
-            const updateUserInterfaceForLoggedInUser = () => {
-                isUserLoggedIn = true;
-                loginButton.textContent = 'Cerrar Sesión';
-                loginButton.href = '#';
-                loginButtonMobile.href = '#';
-                overlays.forEach(overlay => overlay.classList.add('hidden'));
-                const handleSignOut = (e) => {
-                    e.preventDefault();
-                    auth.signOut();
-                    console.log('Cerrando sesión...');
-                };
-                loginButton.onclick = handleSignOut;
-                loginButtonMobile.onclick = handleSignOut;
-            };
-
-            const updateUserInterfaceForLoggedOutUser = () => {
-                isUserLoggedIn = false;
-                loginButton.textContent = 'Iniciar Sesión';
-                loginButton.href = 'login.html';
-                loginButtonMobile.href = 'login.html';
-                loginButton.onclick = null;
-                loginButtonMobile.onclick = null;
+            const blockModules = (event) => {
+                event.preventDefault();
+                overlays.forEach(overlay => overlay.classList.remove('hidden'));
             };
 
             auth.onAuthStateChanged((user) => {
                 if (user) {
-                    console.log('Home Page: Usuario detectado. Desbloqueando...');
-                    updateUserInterfaceForLoggedInUser();
+                    console.log("Usuario detectado:", user.email, ". Aplicando estado 'Conectado'.");
+
+                    const setupLogoutButton = (button) => {
+                        button.textContent = 'Cerrar Sesión';
+                        button.className = 'font-semibold text-amber-400 bg-transparent hover:bg-amber-500/20 border border-amber-500 rounded-lg py-2 px-5 transition-all duration-300';
+                        button.onclick = (e) => {
+                            e.preventDefault();
+                            auth.signOut();
+                        };
+                    };
+                    setupLogoutButton(loginButton);
+                    // setupLogoutButton(loginButtonMobile);
+
+                    moduleLinks.forEach(link => {
+                        link.removeEventListener('click', blockModules);
+                    });
+
+                    overlays.forEach(overlay => overlay.classList.add('hidden'));
                 } else {
-                    console.log('Home Page: No hay usuario. Bloqueando...');
-                    updateUserInterfaceForLoggedOutUser();
+                    console.log("No hay usuario. Aplicando estado 'Desconectado'.");
+
+                    const setupLoginButton = (button) => {
+                        button.textContent = 'Iniciar Sesión';
+                        button.className = 'font-semibold text-white bg-transparent hover:bg-blue-500/20 border border-blue-400 rounded-lg py-2 px-5 transition-all duration-300';
+                        button.href = 'iniciar-sesion.html';
+                        button.onclick = null;
+                    };
+                    setupLoginButton(loginButton);
+                    // setupLoginButton(loginButtonMobile);
+
+                    moduleLinks.forEach(link => {
+                        link.addEventListener('click', blockModules);
+                    });
                 }
             });
-
-            setupModuleClickListeners();
         });
     </script>
 </body>
