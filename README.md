@@ -4,7 +4,8 @@ Este repositorio contiene un conjunto de páginas HTML diseñadas para gestionar
 
 ## Estructura del sitio
 - **home.html**: página de entrada principal. Desde aquí se accede a `login.html` e `register.html`.
-- **login.html / register.html**: formularios de autenticación. `login.html` (o `index.html` si se renombra) carga el script `login.js` para gestionar el inicio de sesión con Firebase y tras autenticar redirige a `home.html`.
+- **login.html**: formulario de acceso para usuarios existentes. Utiliza `login.js` para autenticar con Firebase y luego redirige a `home.html`.
+- **register.html**: permite crear una cuenta nueva. Incluye un script interno que inicializa Firebase y gestiona el registro.
 - **listado-maestro.html**: panel central para el control de documentación. Requiere autenticación.
 - **amfe.html**: herramienta de análisis AMFE. Requiere autenticación.
 - **sinoptico-producto.html**: visualización jerárquica de componentes. Requiere autenticación.
