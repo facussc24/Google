@@ -24,10 +24,15 @@ const loginForm = document.getElementById('login-form');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const messageContainer = document.getElementById('message-container');
+const loginButton = loginForm.querySelector('button[type="submit"]');
 
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     messageContainer.textContent = '';
+    if (loginButton) {
+        loginButton.disabled = true;
+        loginButton.textContent = 'Ingresando...';
+    }
     signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value)
         .then(() => {
             window.location.href = 'home.html';
@@ -47,5 +52,9 @@ loginForm.addEventListener('submit', (e) => {
             }
             messageContainer.textContent = friendlyMessage;
             messageContainer.className = 'message-placeholder text-center text-sm text-red-600';
+            if (loginButton) {
+                loginButton.disabled = false;
+                loginButton.textContent = 'Ingresar';
+            }
         });
 });
