@@ -8,7 +8,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyD4FopYX645rwDYGSQTdDV0VObqds6q34g",
     authDomain: "proyecto-barack-4f731.firebaseapp.com",
     projectId: "proyecto-barack-4f731",
-    storageBucket: "proyecto-barack-4f731.firebasestorage.app",
+    storageBucket: "proyecto-barack-4f731.appspot.com",
     messagingSenderId: "730750717116",
     appId: "1:730750717116:web:1fbcab2cbb59e0d83454b9"
 };
@@ -18,21 +18,21 @@ try {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const protectedPages = ['home.html', 'amfe.html', 'listado-maestro.html'];
+    const protectedPages = ['home.html', 'amfe.html', 'listado-maestro.html', 'sinoptico-producto.html'];
     const currentPage = window.location.pathname.split('/').pop();
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
             console.log("Usuario autenticado:", user.email);
             buildHeader(user);
-            if (currentPage === 'index.html' || currentPage === 'iniciar-sesion.html' || currentPage === '') {
+            if (currentPage === 'index.html' || currentPage === 'login.html' || currentPage === '') {
                 window.location.href = 'home.html';
             }
         } else {
             console.log("No hay usuario autenticado.");
             if (protectedPages.includes(currentPage)) {
                 console.log(`Acceso denegado a ${currentPage}. Redirigiendo...`);
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             }
         }
     });
@@ -49,7 +49,7 @@ try {
             { href: 'home.html', text: 'Inicio' },
             { href: 'listado-maestro.html', text: 'Listado Maestro' },
             { href: 'amfe.html', text: 'Análisis AMFE' },
-            { href: '#', text: 'Sinóptico Producto' }
+            { href: 'sinoptico-producto.html', text: 'Sinóptico Producto' }
         ];
 
         const activePage = window.location.pathname.split('/').pop();
@@ -92,7 +92,7 @@ try {
         document.getElementById('logout-button').addEventListener('click', () => {
             signOut(auth).then(() => {
                 console.log("Cierre de sesión exitoso.");
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
             }).catch((error) => {
                 console.error("Error al cerrar sesión:", error);
             });
