@@ -3,17 +3,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-// 1. Configuración de Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyD4FopYX645rwDYGSQTdDV0VObqds6q34g",
-    authDomain: "proyecto-barack-4f731.firebaseapp.com",
-    projectId: "proyecto-barack-4f731",
-    storageBucket: "proyecto-barack-4f731.appspot.com",
-    messagingSenderId: "730750717116",
-    appId: "1:730750717116:web:1fbcab2cbb59e0d83454b9"
-};
-// Inicializa Firebase y Auth
-const app = initializeApp(firebaseConfig);
+// 1. Inicializa Firebase y Auth
+// Firebase se inicializa automáticamente cuando se aloja en Firebase Hosting
+const app = initializeApp({});
 const auth = getAuth(app);
 const loginPage = 'login.html';
 

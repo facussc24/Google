@@ -9,15 +9,7 @@ import {
     getRedirectResult
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyD4FopYX645rwDYGSQTdDV0VObqds6q34g",
-    authDomain: "proyecto-barack-4f731.firebaseapp.com",
-    projectId: "proyecto-barack-4f731",
-    storageBucket: "proyecto-barack-4f731.appspot.com",
-    messagingSenderId: "730750717116",
-    appId: "1:730750717116:web:1fbcab2cbb59e0d83454b9"
-};
-const app = initializeApp(firebaseConfig);
+const app = initializeApp({});
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
