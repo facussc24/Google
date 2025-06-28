@@ -30,13 +30,14 @@ onAuthStateChanged(auth, (user) => {
 const loginForm = document.getElementById('login-form');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
-const messageContainer = document.getElementById('message-container');
+const errorMessage = document.getElementById('error-message');
 const loginButton = loginForm.querySelector('button[type="submit"]');
-const googleBtn = document.getElementById('google-signin-btn');
+const googleBtn = document.getElementById('google-login-button');
 
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    messageContainer.textContent = '';
+    errorMessage.textContent = '';
+    errorMessage.classList.add('hidden');
     if (loginButton) {
         loginButton.disabled = true;
         loginButton.textContent = 'Ingresando...';
@@ -58,8 +59,9 @@ loginForm.addEventListener('submit', (e) => {
                     friendlyMessage = 'El formato del correo electrónico no es válido.';
                     break;
             }
-            messageContainer.textContent = friendlyMessage;
-            messageContainer.className = 'message-placeholder text-center text-sm text-red-600';
+            errorMessage.textContent = friendlyMessage;
+            errorMessage.className = 'message-placeholder text-center text-sm text-red-600';
+            errorMessage.classList.remove('hidden');
             if (loginButton) {
                 loginButton.disabled = false;
                 loginButton.textContent = 'Ingresar';
@@ -69,7 +71,8 @@ loginForm.addEventListener('submit', (e) => {
 
 if (googleBtn) {
     googleBtn.addEventListener('click', () => {
-        messageContainer.textContent = '';
+        errorMessage.textContent = '';
+        errorMessage.classList.add('hidden');
         signInWithPopup(auth, googleProvider)
             .then(() => {
                 window.location.href = 'home.html';
@@ -85,8 +88,9 @@ if (googleBtn) {
                         friendlyMessage = 'Ya existe una cuenta con este email.';
                         break;
                 }
-                messageContainer.textContent = friendlyMessage;
-                messageContainer.className = 'message-placeholder text-center text-sm text-red-600';
+                errorMessage.textContent = friendlyMessage;
+                errorMessage.className = 'message-placeholder text-center text-sm text-red-600';
+                errorMessage.classList.remove('hidden');
             });
     });
 }
