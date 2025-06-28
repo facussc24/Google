@@ -284,9 +284,6 @@
                         let cells = `<td class="p-3 font-medium text-gray-900">${product.name}</td>`;
                         App.state.docKeys.forEach(key => {
                             const docData = product.data[key] || { rev: '', link: '' };
-                            // El link usa `file://` para compatibilidad con Electron en redes locales.
-                            // Podría no funcionar en navegadores web por seguridad.
-                            const linkContent = docData.link ? `<a href="file://${docData.link}" target="_blank" class="text-blue-600 hover:underline">${docData.link}</a>` : '';
                             cells += `
                                 <td class="p-1 text-center" data-product-id="${product.id}" data-doc-key="${key}" data-field="rev" contenteditable="true">${docData.rev}</td>
                                 <td class="p-1 text-center" data-product-id="${product.id}" data-doc-key="${key}" data-field="link" contenteditable="true">${docData.link}</td>
