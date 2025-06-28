@@ -1,7 +1,6 @@
 // --- app.js (Debe incluirse en todas las páginas protegidas) ---
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app-check.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 // 1. Configuración de Firebase
@@ -13,22 +12,8 @@ const firebaseConfig = {
     messagingSenderId: "730750717116",
     appId: "1:730750717116:web:1fbcab2cbb59e0d83454b9"
 };
-const recaptchaV3SiteKey = "6LdzJ3ErAAAAAAHV3HV1x8vIOjm3lcehnfWfjYT6r";
-
-function setupAppCheck(firebaseApp) {
-    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-        self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-    }
-    initializeAppCheck(firebaseApp, {
-        provider: new ReCaptchaV3Provider(recaptchaV3SiteKey),
-        isTokenAutoRefreshEnabled: true
-    });
-    console.log('✅ Firebase App Check inicializado con reCAPTCHA v3');
-}
-
 // Inicializa Firebase y Auth
 const app = initializeApp(firebaseConfig);
-setupAppCheck(app);
 const auth = getAuth(app);
 const loginPage = 'login.html';
 

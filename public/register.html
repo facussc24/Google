@@ -78,10 +78,8 @@
     </div>
 
     <!-- SDKs de Firebase -->
-    <script src="https://www.google.com/recaptcha/api.js?render=6LdzJ3ErAAAAAAHV3HV1x8vIOjm3lcehnfWfjYT6r"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app-check.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -92,21 +90,7 @@
             messagingSenderId: "730750717116",
             appId: "1:730750717116:web:1fbcab2cbb59e0d83454b9"
         };
-        const recaptchaV3SiteKey = "6LdzJ3ErAAAAAAHV3HV1x8vIOjm3lcehnfWfjYT6r";
-
-        function setupAppCheck(firebaseApp) {
-            if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
-                self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
-            }
-            initializeAppCheck(firebaseApp, {
-                provider: new ReCaptchaV3Provider(recaptchaV3SiteKey),
-                isTokenAutoRefreshEnabled: true
-            });
-            console.log('✅ Firebase App Check inicializado con reCAPTCHA v3');
-        }
-
         const app = initializeApp(firebaseConfig);
-        setupAppCheck(app);
         const auth = getAuth(app);
         const googleProvider = new GoogleAuthProvider();
 
