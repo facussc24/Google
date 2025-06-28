@@ -23,8 +23,12 @@
     <div id="header-container">
         <div class="bg-gray-800 h-16 flex items-center justify-center text-white">Cargando encabezado...</div>
     </div>
-    <canvas id="bg-canvas"></canvas>
-    <div class="relative z-10">
+    <div id="loader" class="flex justify-center items-center h-64">
+        <p class="text-gray-500 text-xl">Verificando acceso...</p>
+    </div>
+    <div id="page-content" class="hidden">
+        <canvas id="bg-canvas"></canvas>
+        <div class="relative z-10">
         <section class="min-h-screen flex items-center justify-center text-center px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl">
                 <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4">Ingeniería para la <span class="text-blue-400">Industria Automotriz</span></h1>
@@ -85,6 +89,7 @@
             <p class="text-gray-400">&copy; 2024 Proyecto Barack. Todos los derechos reservados.</p>
             <p class="text-gray-500 text-sm mt-2">Plataforma interna para el equipo de Ingeniería.</p>
         </footer>
+    </div>
     </div>
     <script>
         let scene, camera, renderer, particles, mouseX = 0, mouseY = 0;
