@@ -1,5 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import {
+    getAuth,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD4FopYX645rwDYGSQTdDV0VObqds6q34g",
@@ -12,6 +18,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
 // Redirect already authenticated users
 onAuthStateChanged(auth, (user) => {
@@ -25,6 +32,7 @@ const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const messageContainer = document.getElementById('message-container');
 const loginButton = loginForm.querySelector('button[type="submit"]');
+const googleBtn = document.getElementById('google-signin-btn');
 
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -58,3 +66,27 @@ loginForm.addEventListener('submit', (e) => {
             }
         });
 });
+
+if (googleBtn) {
+    googleBtn.addEventListener('click', () => {
+        messageContainer.textContent = '';
+        signInWithPopup(auth, googleProvider)
+            .then(() => {
+                window.location.href = 'home.html';
+            })
+            .catch((error) => {
+                console.error('Google sign-in error:', error.code, error.message);
+                let friendlyMessage = 'Error al iniciar sesión con Google.';
+                switch (error.code) {
+                    case 'auth/popup-closed-by-user':
+                        friendlyMessage = 'La ventana de inicio de sesión fue cerrada.';
+                        break;
+                    case 'auth/account-exists-with-different-credential':
+                        friendlyMessage = 'Ya existe una cuenta con este email.';
+                        break;
+                }
+                messageContainer.textContent = friendlyMessage;
+                messageContainer.className = 'message-placeholder text-center text-sm text-red-600';
+            });
+    });
+}
