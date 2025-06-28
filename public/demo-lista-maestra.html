@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo Lista Maestra</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-6">
+    <h1 class="text-2xl font-bold mb-4">Demo Lista Maestra</h1>
+
+    <div class="flex mb-4 space-x-2">
+        <input id="mensaje-input" type="text" placeholder="Escribe un mensaje" class="border p-2 rounded flex-grow">
+        <button id="agregar-btn" class="bg-blue-600 text-white px-4 py-2 rounded">Agregar</button>
+    </div>
+
+    <ul id="lista" class="space-y-2"></ul>
+
+    <script type="module">
+        import { addItem, subscribeToList } from './lista-maestra.js';
+
+        const input = document.getElementById('mensaje-input');
+        const btn = document.getElementById('agregar-btn');
+        const lista = document.getElementById('lista');
+
+        // Push a new item when the user clicks the button
+        btn.addEventListener('click', () => {
+            const texto = input.value.trim();
+            if (texto) {
+                addItem(texto);
+                input.value = '';
+            }
+        });
+
+        // Listen for real-time updates on /miListaMaestra
+        subscribeToList({
+            onAdd: (item) => {
+                const li = document.createElement('li');
+                li.id = item.id;
+                li.textContent = `${item.texto}`;
+                lista.appendChild(li);
+            },
+            onChange: (item) => {
+                const li = document.getElementById(item.id);
+                if (li) li.textContent = `${item.texto}`;
+            },
+            onRemove: (id) => {
+                const li = document.getElementById(id);
+                if (li) li.remove();
+            }
+        });
+    </script>
+</body>
+</html>
