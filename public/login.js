@@ -4,7 +4,9 @@ import {
     onAuthStateChanged,
     signInWithEmailAndPassword,
     GoogleAuthProvider,
-    signInWithPopup
+    signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 const firebaseConfig = {
@@ -27,6 +29,15 @@ onAuthStateChanged(auth, (user) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    getRedirectResult(auth)
+        .then((result) => {
+            if (result && result.user) {
+                window.location.href = 'home.html';
+            }
+        })
+        .catch((error) => {
+            console.error('Google redirect error:', error.code, error.message);
+        });
     const loginForm = document.getElementById('login-form');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
@@ -74,24 +85,25 @@ document.addEventListener('DOMContentLoaded', () => {
             errorMessage.textContent = '';
             errorMessage.classList.add('hidden');
             signInWithPopup(auth, googleProvider)
-                .catch(() => signInWithRedirect(auth, googleProvider))
                 .then(() => {
                     window.location.href = 'home.html';
                 })
-                .catch((error) => {
-                    console.error('Google sign-in error:', error.code, error.message);
-                    let friendlyMessage = 'Error al iniciar sesión con Google.';
-                    switch (error.code) {
-                        case 'auth/popup-closed-by-user':
-                            friendlyMessage = 'La ventana de inicio de sesión fue cerrada.';
-                            break;
-                        case 'auth/account-exists-with-different-credential':
-                            friendlyMessage = 'Ya existe una cuenta con este email.';
-                            break;
-                    }
-                    errorMessage.textContent = friendlyMessage;
-                    errorMessage.className = 'message-placeholder text-center text-sm text-red-600';
-                    errorMessage.classList.remove('hidden');
+                .catch(() => {
+                    signInWithRedirect(auth, googleProvider).catch((error) => {
+                        console.error('Google sign-in error:', error.code, error.message);
+                        let friendlyMessage = 'Error al iniciar sesión con Google.';
+                        switch (error.code) {
+                            case 'auth/popup-closed-by-user':
+                                friendlyMessage = 'La ventana de inicio de sesión fue cerrada.';
+                                break;
+                            case 'auth/account-exists-with-different-credential':
+                                friendlyMessage = 'Ya existe una cuenta con este email.';
+                                break;
+                        }
+                        errorMessage.textContent = friendlyMessage;
+                        errorMessage.className = 'message-placeholder text-center text-sm text-red-600';
+                        errorMessage.classList.remove('hidden');
+                    });
                 });
         });
     }
