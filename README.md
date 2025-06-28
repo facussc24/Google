@@ -11,7 +11,7 @@ Este repositorio contiene un conjunto de páginas HTML diseñadas para gestionar
 - **sinoptico-producto.html**: visualización jerárquica de componentes. Requiere autenticación.
 - **app.js**: se incluye en las páginas protegidas (`home.html`, `listado-maestro.html`, `amfe.html`, etc.) para comprobar que el usuario esté autenticado y para construir dinámicamente el encabezado de navegación.
 
-Las páginas `about.html` y `contact.html` se eliminaron por no estar enlazadas en la navegación. Igualmente `index.html` se eliminó porque duplicaba el contenido de `listado-maestro.html`.
+Las páginas `about.html` y `contact.html` se eliminaron por no estar enlazadas en la navegación. El dominio raíz se redirige directamente a `home.html` gracias a la regla de `firebase.json`.
 
 ## Cómo ejecutar en local
 1. Instala un servidor estático simple (por ejemplo, usando `npm install -g serve`).
